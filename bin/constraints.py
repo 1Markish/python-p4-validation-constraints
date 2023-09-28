@@ -13,10 +13,12 @@ base = declarative_base()
 class Patient(base):
     __tablename__ = 'patient'
     name = Column(String(length=50), primary_key=True)
+    # This is a column CheckConstraint that makes sure we don't add a birth year that is above 2023
     birth_year = Column(Integer,
                         CheckConstraint('birth_year < 2023'),
                         nullable=False)
     death_year = Column(Integer)
+    # This is a table CheckConstraint that ensures the death year is more than the birth year or NULL if the patient is alive
     __table_args__ = (
         CheckConstraint('(death_year is NULL) or (death_year >= birth_year)'),
     )
